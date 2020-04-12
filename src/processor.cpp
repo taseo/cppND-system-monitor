@@ -18,11 +18,11 @@ std::vector<float> Processor::Utilization() {
   auto current_time = std::chrono::high_resolution_clock::now();
 
   if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - prev_time).count() > 200) {
-    std::vector<std::map<std::string, unsigned long int>> current_cpu_stats = LinuxParser::CpuUtilization();
+    std::vector<std::map<std::string, unsigned long>> current_cpu_stats = LinuxParser::CpuUtilization();
 
     for (unsigned int i = 0; i < prev_cpu_stats.size(); i++) {
-      unsigned long int prev_idle = prev_cpu_stats[i]["idle"] + prev_cpu_stats[i]["iowait"];
-      unsigned long int current_idle = current_cpu_stats[i]["idle"] + current_cpu_stats[i]["iowait"];
+      unsigned long prev_idle = prev_cpu_stats[i]["idle"] + prev_cpu_stats[i]["iowait"];
+      unsigned long current_idle = current_cpu_stats[i]["idle"] + current_cpu_stats[i]["iowait"];
 
       unsigned long prev_non_idle =
           prev_cpu_stats[i]["user"] + prev_cpu_stats[i]["nice"] + prev_cpu_stats[i]["system"] +

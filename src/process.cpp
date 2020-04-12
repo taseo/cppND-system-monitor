@@ -26,7 +26,7 @@ string Process::Ram() { return string(); }
 string Process::User() { return string(); }
 
 // TODO: Return the age of this process (in seconds)
-long int Process::UpTime() { return 0; }
+unsigned long Process::UpTime() { return 0; }
 
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function

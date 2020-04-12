@@ -33,16 +33,15 @@ string LinuxParser::OperatingSystem() {
   return value;
 }
 
-// DONE: An example of how to read data from the filesystem
 string LinuxParser::Kernel() {
   string kernel, line;
   std::ifstream stream(kProcDirectory + kVersionFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
-    std::istringstream linestream(line);
+    std::istringstream line_stream(line);
     
     for (int i = 0; i < 3; i++) {
-      linestream >> kernel;
+      line_stream >> kernel;
     }
   }
 
@@ -106,8 +105,21 @@ float LinuxParser::MemoryUtilization() {
   return mem_usage;
 }
 
-// TODO: Read and return the system uptime
-long LinuxParser::UpTime() { return 0; }
+unsigned long LinuxParser::UpTime() {
+  std::string line;
+  std::ifstream file_stream(kProcDirectory + kUptimeFilename);
+
+  unsigned long uptime = 0;
+
+  if (file_stream.is_open()) {
+    std::getline(file_stream, line);
+    std::istringstream line_stream(line);
+
+    line_stream >> uptime;
+  }
+
+  return uptime;
+}
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
@@ -122,21 +134,21 @@ long LinuxParser::ActiveJiffies() { return 0; }
 // TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies() { return 0; }
 
-std::vector<std::map<std::string, unsigned long int>> LinuxParser::CpuUtilization() {
+std::vector<std::map<std::string, unsigned long>> LinuxParser::CpuUtilization() {
   std::string line;
-  std::vector<std::map<std::string, unsigned long int>> result;
+  std::vector<std::map<std::string, unsigned long>> result;
 
   std::string cpu;
-  unsigned long int user;
-  unsigned long int nice ;
-  unsigned long int system;
-  unsigned long int idle;
-  unsigned long int iowait;
-  unsigned long int irq;
-  unsigned long int softirq;
-  unsigned long int steal;
-  unsigned long int guest;
-  unsigned long int guest_nice;
+  unsigned long user;
+  unsigned long nice ;
+  unsigned long system;
+  unsigned long idle;
+  unsigned long iowait;
+  unsigned long irq;
+  unsigned long softirq;
+  unsigned long steal;
+  unsigned long guest;
+  unsigned long guest_nice;
 
   std::ifstream file_stream(kProcDirectory + kStatFilename);
 
@@ -152,18 +164,18 @@ std::vector<std::map<std::string, unsigned long int>> LinuxParser::CpuUtilizatio
 
       line_stream >> user >> nice >> system >> idle >> iowait >> irq >> softirq >> steal >> guest >> guest_nice;
 
-      std::map<std::string, unsigned long int> cpu_stats;
+      std::map<std::string, unsigned long> cpu_stats;
 
-      cpu_stats.insert(std::pair<std::string, unsigned long int>("user", user));
-      cpu_stats.insert(std::pair<std::string, unsigned long int>("nice", nice));
-      cpu_stats.insert(std::pair<std::string, unsigned long int>("system", system));
-      cpu_stats.insert(std::pair<std::string, unsigned long int>("idle", idle));
-      cpu_stats.insert(std::pair<std::string, unsigned long int>("iowait", iowait));
-      cpu_stats.insert(std::pair<std::string, unsigned long int>("irq", irq));
-      cpu_stats.insert(std::pair<std::string, unsigned long int>("softirq", softirq));
-      cpu_stats.insert(std::pair<std::string, unsigned long int>("steal", steal));
-      cpu_stats.insert(std::pair<std::string, unsigned long int>("guest", guest));
-      cpu_stats.insert(std::pair<std::string, unsigned long int>("guest_nice", guest_nice));
+      cpu_stats.insert(std::pair<std::string, unsigned long>("user", user));
+      cpu_stats.insert(std::pair<std::string, unsigned long>("nice", nice));
+      cpu_stats.insert(std::pair<std::string, unsigned long>("system", system));
+      cpu_stats.insert(std::pair<std::string, unsigned long>("idle", idle));
+      cpu_stats.insert(std::pair<std::string, unsigned long>("iowait", iowait));
+      cpu_stats.insert(std::pair<std::string, unsigned long>("irq", irq));
+      cpu_stats.insert(std::pair<std::string, unsigned long>("softirq", softirq));
+      cpu_stats.insert(std::pair<std::string, unsigned long>("steal", steal));
+      cpu_stats.insert(std::pair<std::string, unsigned long>("guest", guest));
+      cpu_stats.insert(std::pair<std::string, unsigned long>("guest_nice", guest_nice));
 
       result.push_back(cpu_stats);
     }
@@ -198,4 +210,4 @@ string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
+unsigned long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }

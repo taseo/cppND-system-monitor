@@ -12,7 +12,7 @@ public:
   std::vector<float> Utilization();
 
 private:
-  std::vector<std::map<std::string, unsigned long int>> prev_cpu_stats;
+  std::vector<std::map<std::string, unsigned long>> prev_cpu_stats;
   std::chrono::time_point<std::chrono::system_clock> prev_time;
   std::vector<float> cpu_utilization;
 };
