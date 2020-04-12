@@ -13,8 +13,8 @@ class System {
   std::vector<Process>& Processes();  // TODO: See src/system.cpp
   float MemoryUtilization();
   unsigned long UpTime();
-  int TotalProcesses();               // TODO: See src/system.cpp
-  int RunningProcesses();             // TODO: See src/system.cpp
+  unsigned int TotalProcesses();
+  unsigned int RunningProcesses();
   std::string Kernel();
   std::string OperatingSystem();
 
