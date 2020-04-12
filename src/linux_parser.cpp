@@ -122,8 +122,57 @@ long LinuxParser::ActiveJiffies() { return 0; }
 // TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies() { return 0; }
 
-// TODO: Read and return CPU utilization
-vector<string> LinuxParser::CpuUtilization() { return {}; }
+std::vector<std::map<std::string, unsigned long int>> LinuxParser::CpuUtilization() {
+  std::string line;
+  std::vector<std::map<std::string, unsigned long int>> result;
+
+  std::string cpu;
+  unsigned long int user;
+  unsigned long int nice ;
+  unsigned long int system;
+  unsigned long int idle;
+  unsigned long int iowait;
+  unsigned long int irq;
+  unsigned long int softirq;
+  unsigned long int steal;
+  unsigned long int guest;
+  unsigned long int guest_nice;
+
+  std::ifstream file_stream(kProcDirectory + kStatFilename);
+
+  if (file_stream.is_open()) {
+    while (std::getline(file_stream, line)) {
+      std::istringstream line_stream(line);
+
+      line_stream >> cpu;
+
+      if (cpu == "cpu") { continue; } // skip total CPU utilization
+
+      if (cpu.substr(0, 3) != "cpu") { break; }
+
+      line_stream >> user >> nice >> system >> idle >> iowait >> irq >> softirq >> steal >> guest >> guest_nice;
+
+      std::map<std::string, unsigned long int> cpu_stats;
+
+      cpu_stats.insert(std::pair<std::string, unsigned long int>("user", user));
+      cpu_stats.insert(std::pair<std::string, unsigned long int>("nice", nice));
+      cpu_stats.insert(std::pair<std::string, unsigned long int>("system", system));
+      cpu_stats.insert(std::pair<std::string, unsigned long int>("idle", idle));
+      cpu_stats.insert(std::pair<std::string, unsigned long int>("iowait", iowait));
+      cpu_stats.insert(std::pair<std::string, unsigned long int>("irq", irq));
+      cpu_stats.insert(std::pair<std::string, unsigned long int>("softirq", softirq));
+      cpu_stats.insert(std::pair<std::string, unsigned long int>("steal", steal));
+      cpu_stats.insert(std::pair<std::string, unsigned long int>("guest", guest));
+      cpu_stats.insert(std::pair<std::string, unsigned long int>("guest_nice", guest_nice));
+
+      result.push_back(cpu_stats);
+    }
+
+    return result;
+  }
+
+  return result;
+}
 
 // TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() { return 0; }

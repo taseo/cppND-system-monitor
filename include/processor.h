@@ -1,12 +1,20 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 
-class Processor {
- public:
-  float Utilization();  // TODO: See src/processor.cpp
+#include <chrono>
+#include <map>
+#include <vector>
 
-  // TODO: Declare any necessary private members
- private:
+class Processor {
+public:
+  Processor();
+
+  std::vector<float> Utilization();
+
+private:
+  std::vector<std::map<std::string, unsigned long int>> prev_cpu_stats;
+  std::chrono::time_point<std::chrono::system_clock> prev_time;
+  std::vector<float> cpu_utilization;
 };
 
 #endif
