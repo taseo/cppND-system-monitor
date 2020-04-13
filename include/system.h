@@ -10,7 +10,7 @@
 class System {
  public:
   Processor& Cpu();
-  std::vector<Process>& Processes();  // TODO: See src/system.cpp
+  std::vector<Process>& Processes();
   float MemoryUtilization();
   unsigned long UpTime();
   unsigned int TotalProcesses();
@@ -18,8 +18,10 @@ class System {
   std::string Kernel();
   std::string OperatingSystem();
 
-  // TODO: Define any necessary private members
  private:
+  static bool CompareProcesses(Process& a, Process& b) {
+    return (a.CpuUtilization()) > (b.CpuUtilization());
+  }
   Processor cpu_ = {};
   std::vector<Process> processes_ = {};
   std::string operating_system_;

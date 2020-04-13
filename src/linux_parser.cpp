@@ -49,8 +49,8 @@ string LinuxParser::Kernel() {
 }
 
 // BONUS: Update this to use std::filesystem
-vector<int> LinuxParser::Pids() {
-  vector<int> pids;
+vector<unsigned int> LinuxParser::Pids() {
+  vector<unsigned int> pids;
   DIR* directory = opendir(kProcDirectory.c_str());
   struct dirent* file;
   while ((file = readdir(directory)) != nullptr) {
@@ -105,11 +105,11 @@ float LinuxParser::MemoryUtilization() {
   return mem_usage;
 }
 
-unsigned long LinuxParser::UpTime() {
+float LinuxParser::UpTime() {
   std::string line;
   std::ifstream file_stream(kProcDirectory + kUptimeFilename);
 
-  unsigned long uptime = 0;
+  float uptime = 0.0;
 
   if (file_stream.is_open()) {
     std::getline(file_stream, line);
@@ -179,6 +179,54 @@ std::vector<std::map<std::string, unsigned long>> LinuxParser::CpuUtilization() 
 
       result.push_back(cpu_stats);
     }
+
+    return result;
+  }
+
+  return result;
+}
+
+std::map<std::string, float> LinuxParser::CpuUtilization(unsigned int pid) {
+  std::string line;
+  std::string param;
+  std::string::size_type string_size;
+  std::map<std::string, float> result;
+
+  unsigned int counter = 0;
+
+  std::ifstream file_stream(kProcDirectory + std::to_string(pid) + kStatFilename);
+
+  if (file_stream.is_open()) {
+    std::getline(file_stream, line);
+    std::istringstream line_stream(line);
+
+    while (line_stream >> param) {
+      switch (counter) {
+        case 13:
+          result.insert(std::pair<std::string, float>("utime", std::stof(param, &string_size)));
+          break;
+        case 14:
+          result.insert(std::pair<std::string, float>("stime", std::stof(param, &string_size)));
+          break;
+        case 15:
+          result.insert(std::pair<std::string, float>("cutime", std::stof(param, &string_size)));
+          break;
+        case 16:
+          result.insert(std::pair<std::string, float>("cstime", std::stof(param, &string_size)));
+          break;
+        case 21:
+          result.insert(std::pair<std::string, float>("starttime", std::stof(param, &string_size)));
+          break;
+      }
+
+      counter++;
+
+      if (counter > 21) {
+        break;
+      }
+    }
+
+    result.insert(std::pair<std::string, float>("system_uptime", LinuxParser::UpTime()));
 
     return result;
   }

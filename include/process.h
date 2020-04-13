@@ -2,22 +2,24 @@
 #define PROCESS_H
 
 #include <string>
-/*
-Basic class for Process representation
-It contains relevant attributes as shown below
-*/
+#include <map>
+
 class Process {
  public:
-  int Pid();                               // TODO: See src/process.cpp
+  Process(unsigned int pid);
+  unsigned int Pid();
   std::string User();                      // TODO: See src/process.cpp
   std::string Command();                   // TODO: See src/process.cpp
-  float CpuUtilization();                  // TODO: See src/process.cpp
+  float CpuUtilization();
+  void UpdateCpuUtilization();
   std::string Ram();                       // TODO: See src/process.cpp
   unsigned long UpTime();                  // TODO: See src/process.cpp
   bool operator<(Process const& a) const;  // TODO: See src/process.cpp
 
-  // TODO: Declare any necessary private members
  private:
+  std::map<std::string, float> prev_cpu_stats_;
+  float cpu_utilization_{};
+  unsigned int pid_;
 };
 
 #endif

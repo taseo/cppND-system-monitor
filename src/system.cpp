@@ -17,8 +17,27 @@ using std::vector;
 
 Processor &System::Cpu() { return cpu_; }
 
-// TODO: Return a container composed of the system's processes
-vector<Process>& System::Processes() { return processes_; }
+vector<Process> &System::Processes() {
+  std::vector<unsigned int> pids = LinuxParser::Pids();
+  std::vector<Process> processes;
+
+  processes.reserve(pids.size());
+
+  for (auto pid : pids) {
+    processes.emplace_back(Process(pid));
+  }
+
+  usleep(200000);
+
+  for (auto &process: processes) {
+    process.UpdateCpuUtilization();
+  }
+
+  std::sort(processes.begin(), processes.end(), CompareProcesses);
+  processes_ = processes;
+
+  return processes_;
+}
 
 std::string System::Kernel() {
     if (kernel_.empty()) {
