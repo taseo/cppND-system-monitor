@@ -6,6 +6,7 @@
 
 #include "process.h"
 #include <linux_parser.h>
+#include <iomanip>
 
 using std::string;
 using std::to_string;
@@ -48,8 +49,12 @@ std::string Process::Command() {
   return LinuxParser::Command(pid_);
 }
 
-// TODO: Return this process's memory utilization
-string Process::Ram() { return string(); }
+std::string Process::Ram() {
+  std::stringstream stream;
+  stream << std::fixed << std::setprecision(1) << (LinuxParser::Ram(pid_) / 1024);
+
+  return stream.str();
+}
 
 // TODO: Return the user (name) that generated this process
 string Process::User() { return string(); }
@@ -57,7 +62,3 @@ string Process::User() { return string(); }
 float Process::UpTime() {
   return uptime_;
 }
-
-// TODO: Overload the "less than" comparison operator for Process objects
-// REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a[[maybe_unused]]) const { return true; }
