@@ -1,5 +1,4 @@
 #include <unistd.h>
-#include <cstddef>
 #include <set>
 #include <string>
 #include <vector>
@@ -8,16 +7,10 @@
 #include "processor.h"
 #include "system.h"
 #include <linux_parser.h>
-#include <format.h>
-
-using std::set;
-using std::size_t;
-using std::string;
-using std::vector;
 
 Processor &System::Cpu() { return cpu_; }
 
-vector<Process> &System::Processes() {
+std::vector<Process> &System::Processes() {
   std::vector<unsigned int> pids = LinuxParser::Pids();
   std::vector<Process> processes;
 
@@ -40,23 +33,23 @@ vector<Process> &System::Processes() {
 }
 
 std::string System::Kernel() {
-    if (kernel_.empty()) {
-        kernel_ = LinuxParser::Kernel();
-    }
+  if (kernel_.empty()) {
+    kernel_ = LinuxParser::Kernel();
+  }
 
-    return kernel_;
+  return kernel_;
 }
 
-float System::MemoryUtilization() { 
-    return LinuxParser::MemoryUtilization();
- }
+float System::MemoryUtilization() {
+  return LinuxParser::MemoryUtilization();
+}
 
 std::string System::OperatingSystem() {
-    if (operating_system_.empty()) {
-        operating_system_ = LinuxParser::OperatingSystem();
-    }
+  if (operating_system_.empty()) {
+    operating_system_ = LinuxParser::OperatingSystem();
+  }
 
-    return operating_system_;
+  return operating_system_;
 }
 
 unsigned int System::RunningProcesses() {

@@ -1,16 +1,10 @@
 #include <unistd.h>
-#include <cctype>
 #include <sstream>
 #include <string>
-#include <vector>
 
 #include "process.h"
 #include <linux_parser.h>
 #include <iomanip>
-
-using std::string;
-using std::to_string;
-using std::vector;
 
 Process::Process(unsigned int pid) {
   pid_ = pid;
@@ -21,6 +15,7 @@ unsigned int Process::Pid() {
   return pid_;
 }
 
+// calculation for cpu utilization is based on https://stackoverflow.com/a/16736599
 void Process::UpdateStats() {
   auto Hertz = (float) sysconf(_SC_CLK_TCK);
 
@@ -56,7 +51,7 @@ std::string Process::Ram() {
   return stream.str();
 }
 
-string Process::User() {
+std::string Process::User() {
   return LinuxParser::User(LinuxParser::Uid(pid_));
 }
 

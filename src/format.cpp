@@ -2,9 +2,7 @@
 
 #include "format.h"
 
-using std::string;
-
-string Format::ElapsedTime(unsigned long seconds) {
+std::string Format::ElapsedTime(unsigned long seconds) {
   unsigned int hour = seconds / 3600;
   unsigned int minute = (seconds % 3600) / 60;
   unsigned int second = seconds % 60;

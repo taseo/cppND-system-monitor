@@ -8,9 +8,9 @@
 #include "processor.h"
 
 class System {
- public:
-  Processor& Cpu();
-  std::vector<Process>& Processes();
+public:
+  Processor &Cpu();
+  std::vector<Process> &Processes();
   float MemoryUtilization();
   unsigned long UpTime();
   unsigned int TotalProcesses();
@@ -18,10 +18,11 @@ class System {
   std::string Kernel();
   std::string OperatingSystem();
 
- private:
-  static bool CompareProcesses(Process& a, Process& b) {
+private:
+  static bool CompareProcesses(Process &a, Process &b) {
     return (a.CpuUtilization()) > (b.CpuUtilization());
   }
+
   Processor cpu_ = {};
   std::vector<Process> processes_ = {};
   std::string operating_system_;

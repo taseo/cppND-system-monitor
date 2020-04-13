@@ -13,7 +13,7 @@ Processor::Processor() {
 
   prev_time = std::chrono::high_resolution_clock::now();
 }
-
+// calculation for cpu utilization is based on https://stackoverflow.com/a/23376195
 std::vector<float> Processor::Utilization() {
   auto current_time = std::chrono::high_resolution_clock::now();
 

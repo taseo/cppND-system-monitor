@@ -1,20 +1,13 @@
 #include <dirent.h>
-#include <unistd.h>
 #include <string>
 #include <vector>
 
 #include "linux_parser.h"
 
-using std::stof;
-using std::string;
-using std::to_string;
-using std::vector;
-
-// DONE: An example of how to read data from the filesystem
-string LinuxParser::OperatingSystem() {
-  string line;
-  string key;
-  string value;
+std::string LinuxParser::OperatingSystem() {
+  std::string line;
+  std::string key;
+  std::string value;
   std::ifstream filestream(kOSPath);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
@@ -33,13 +26,13 @@ string LinuxParser::OperatingSystem() {
   return value;
 }
 
-string LinuxParser::Kernel() {
-  string kernel, line;
+std::string LinuxParser::Kernel() {
+  std::string kernel, line;
   std::ifstream stream(kProcDirectory + kVersionFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream line_stream(line);
-    
+
     for (int i = 0; i < 3; i++) {
       line_stream >> kernel;
     }
@@ -48,16 +41,16 @@ string LinuxParser::Kernel() {
   return kernel;
 }
 
-// BONUS: Update this to use std::filesystem
-vector<unsigned int> LinuxParser::Pids() {
-  vector<unsigned int> pids;
-  DIR* directory = opendir(kProcDirectory.c_str());
-  struct dirent* file;
+// TODO: update this to use std::filesystem
+std::vector<unsigned int> LinuxParser::Pids() {
+  std::vector<unsigned int> pids;
+  DIR *directory = opendir(kProcDirectory.c_str());
+  struct dirent *file;
   while ((file = readdir(directory)) != nullptr) {
     // Is this a directory?
     if (file->d_type == DT_DIR) {
       // Is every character of the name a digit?
-      string filename(file->d_name);
+      std::string filename(file->d_name);
       if (std::all_of(filename.begin(), filename.end(), isdigit)) {
         int pid = stoi(filename);
         pids.push_back(pid);
@@ -127,7 +120,7 @@ std::vector<std::map<std::string, unsigned long>> LinuxParser::CpuUtilization() 
 
   std::string cpu;
   unsigned long user;
-  unsigned long nice ;
+  unsigned long nice;
   unsigned long system;
   unsigned long idle;
   unsigned long iowait;
@@ -269,7 +262,7 @@ unsigned int LinuxParser::RunningProcesses() {
   return running_processes;
 }
 
-string LinuxParser::Command(unsigned int pid) {
+std::string LinuxParser::Command(unsigned int pid) {
   std::string line;
   std::ifstream file_stream(kProcDirectory + std::to_string(pid) + kCmdlineFilename);
 
@@ -333,7 +326,7 @@ unsigned int LinuxParser::Uid(unsigned int pid) {
   return uid;
 }
 
-string LinuxParser::User(unsigned int uid) {
+std::string LinuxParser::User(unsigned int uid) {
   std::string line;
   std::string x;
   std::string user = std::string();

@@ -17,8 +17,8 @@ public:
 
 private:
   std::map<std::string, float> prev_cpu_stats_;
-  float cpu_utilization_{};
-  float uptime_{};
+  float cpu_utilization_;
+  float uptime_;
   unsigned int pid_;
 };
 
