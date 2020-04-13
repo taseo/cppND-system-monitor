@@ -56,8 +56,9 @@ std::string Process::Ram() {
   return stream.str();
 }
 
-// TODO: Return the user (name) that generated this process
-string Process::User() { return string(); }
+string Process::User() {
+  return LinuxParser::User(LinuxParser::Uid(pid_));
+}
 
 float Process::UpTime() {
   return uptime_;

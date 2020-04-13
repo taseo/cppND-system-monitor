@@ -309,10 +309,48 @@ float LinuxParser::Ram(unsigned int pid) {
   return ram_usage;
 }
 
-// TODO: Read and return the user ID associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Uid(int pid[[maybe_unused]]) { return string(); }
+unsigned int LinuxParser::Uid(unsigned int pid) {
+  std::string line;
+  std::string key;
+  unsigned int uid = 0;
 
-// TODO: Read and return the user associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
+  std::ifstream file_stream(kProcDirectory + std::to_string(pid) + kStatusFilename);
+
+  if (file_stream.is_open()) {
+    while (std::getline(file_stream, line)) {
+      std::istringstream line_stream(line);
+
+      line_stream >> key;
+
+      if (key != "Uid:") { continue; }
+
+      line_stream >> uid;
+
+      return uid;
+    }
+  }
+
+  return uid;
+}
+
+string LinuxParser::User(unsigned int uid) {
+  std::string line;
+  std::string x;
+  std::string user = std::string();
+  unsigned int current_uid;
+
+  std::ifstream file_stream(kPasswordPath);
+
+  if (file_stream.is_open()) {
+    while (std::getline(file_stream, line)) {
+      std::replace(line.begin(), line.end(), ':', ' ');
+      std::istringstream line_stream(line);
+
+      line_stream >> user >> x >> current_uid;
+
+      if (current_uid == uid) { return user; }
+    }
+  }
+
+  return user;
+}

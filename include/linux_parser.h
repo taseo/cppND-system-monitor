@@ -9,7 +9,6 @@ namespace LinuxParser {
   // Paths
   const std::string kProcDirectory{"/proc/"};
   const std::string kCmdlineFilename{"/cmdline"};
-  const std::string kCpuinfoFilename{"/cpuinfo"};
   const std::string kStatusFilename{"/status"};
   const std::string kStatFilename{"/stat"};
   const std::string kUptimeFilename{"/uptime"};
@@ -27,29 +26,14 @@ namespace LinuxParser {
   std::string OperatingSystem();
   std::string Kernel();
 
-  // CPU
-  enum CPUStates {
-    kUser_ = 0,
-    kNice_,
-    kSystem_,
-    kIdle_,
-    kIOwait_,
-    kIRQ_,
-    kSoftIRQ_,
-    kSteal_,
-    kGuest_,
-    kGuestNice_
-  };
-
   std::vector<std::map<std::string, unsigned long>> CpuUtilization();
   std::map<std::string, float> CpuUtilization(unsigned int pid);
 
   // Processes
   std::string Command(unsigned int pid);
   float Ram(unsigned int pid);
-  std::string Uid(int pid);
-  std::string User(int pid);
-  unsigned long UpTime(int pid);
+  unsigned int Uid(unsigned int pid);
+  std::string User(unsigned int uid);
 };
 
 #endif

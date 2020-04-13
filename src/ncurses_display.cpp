@@ -78,13 +78,17 @@ void NCursesDisplay::DisplayProcesses(std::vector<Process>& processes,
   wattroff(window, COLOR_PAIR(2));
   for (int i = 0; i < n; ++i) {
     std::string pid_str = std::to_string(processes[i].Pid());
+    std::string user_str = processes[i].User();
     std::string ram_str = processes[i].Ram();
 
-    pid_str.insert(pid_str.end(), 6 - pid_str.length(), ' ');
+    if (user_str.length() > 7) { user_str = user_str.substr(0, 7); }
+
+    pid_str.insert(pid_str.end(), 7 - pid_str.length(), ' ');
+    user_str.insert(user_str.end(), 7 - user_str.length(), ' ');
     ram_str.insert(ram_str.end(), 26 - ram_str.length(), ' ');
 
     mvwprintw(window, ++row, pid_column, pid_str.c_str());
-    mvwprintw(window, row, user_column, processes[i].User().c_str());
+    mvwprintw(window, row, user_column, user_str.c_str());
     float cpu = processes[i].CpuUtilization() * 100;
     mvwprintw(window, row, cpu_column, to_string(cpu).substr(0, 4).c_str());
     mvwprintw(window, row, ram_column, ram_str.c_str());
