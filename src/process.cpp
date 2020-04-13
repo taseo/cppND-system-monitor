@@ -20,7 +20,7 @@ unsigned int Process::Pid() {
   return pid_;
 }
 
-void Process::UpdateCpuUtilization() {
+void Process::UpdateStats() {
   auto Hertz = (float) sysconf(_SC_CLK_TCK);
 
   std::map<std::string, float> current_cpu_stats = LinuxParser::CpuUtilization(pid_);
@@ -30,13 +30,14 @@ void Process::UpdateCpuUtilization() {
   float current_total_time = current_cpu_stats["utime"] + current_cpu_stats["stime"] +
                              current_cpu_stats["cutime"] + current_cpu_stats["cstime"];
 
-  float prev_seconds = prev_cpu_stats_["system_uptime"] - (prev_cpu_stats_["starttime"] / Hertz);
-  float current_seconds = current_cpu_stats["system_uptime"] - (current_cpu_stats["starttime"] / Hertz);
+  float prev_uptime = prev_cpu_stats_["system_uptime"] - (prev_cpu_stats_["starttime"] / Hertz);
+  float current_uptime = current_cpu_stats["system_uptime"] - (current_cpu_stats["starttime"] / Hertz);
 
   float diff_total = current_total_time - prev_total_time;
-  float diff_seconds = current_seconds - prev_seconds;
+  float diff_uptime = current_uptime - prev_uptime;
 
-  cpu_utilization_ = diff_total / Hertz / diff_seconds;
+  cpu_utilization_ = diff_total / Hertz / diff_uptime;
+  uptime_ = current_uptime;
 }
 
 float Process::CpuUtilization() {
@@ -53,8 +54,9 @@ string Process::Ram() { return string(); }
 // TODO: Return the user (name) that generated this process
 string Process::User() { return string(); }
 
-// TODO: Return the age of this process (in seconds)
-unsigned long Process::UpTime() { return 0; }
+float Process::UpTime() {
+  return uptime_;
+}
 
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function

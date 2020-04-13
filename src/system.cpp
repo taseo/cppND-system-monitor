@@ -30,7 +30,7 @@ vector<Process> &System::Processes() {
   usleep(200000);
 
   for (auto &process: processes) {
-    process.UpdateCpuUtilization();
+    process.UpdateStats();
   }
 
   std::sort(processes.begin(), processes.end(), CompareProcesses);

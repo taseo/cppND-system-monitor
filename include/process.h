@@ -11,14 +11,15 @@ class Process {
   std::string User();                      // TODO: See src/process.cpp
   std::string Command();                   // TODO: See src/process.cpp
   float CpuUtilization();
-  void UpdateCpuUtilization();
+  void UpdateStats();
   std::string Ram();                       // TODO: See src/process.cpp
-  unsigned long UpTime();                  // TODO: See src/process.cpp
+  float UpTime();
   bool operator<(Process const& a) const;  // TODO: See src/process.cpp
 
  private:
   std::map<std::string, float> prev_cpu_stats_;
   float cpu_utilization_{};
+  float uptime_{};
   unsigned int pid_;
 };
 
