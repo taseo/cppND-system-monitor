@@ -14,6 +14,7 @@ public:
   void UpdateStats();
   std::string Ram();
   float UpTime();
+  bool operator<(Process const& a) const;
 
 private:
   std::map<std::string, float> prev_cpu_stats_;

@@ -58,3 +58,7 @@ std::string Process::User() {
 float Process::UpTime() {
   return uptime_;
 }
+
+bool Process::operator<(Process const& a) const {
+  return cpu_utilization_ > a.cpu_utilization_;
+}

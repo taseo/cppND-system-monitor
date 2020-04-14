@@ -1,4 +1,5 @@
 #include <string>
+#include <iomanip>
 
 #include "format.h"
 
@@ -7,13 +8,11 @@ std::string Format::ElapsedTime(unsigned long seconds) {
   unsigned int minute = (seconds % 3600) / 60;
   unsigned int second = seconds % 60;
 
-  std::string hour_str = std::to_string(hour);
-  std::string minute_str = std::to_string(minute);
-  std::string second_str = std::to_string(second);
+  std::stringstream stream;
 
-  hour_str.insert(hour_str.begin(), 2 - hour_str.length(), '0');
-  minute_str.insert(minute_str.begin(), 2 - minute_str.length(), '0');
-  second_str.insert(second_str.begin(), 2 - second_str.length(), '0');
+  stream << std::setfill('0') << std::setw(2) << hour << ":";
+  stream << std::setfill('0') << std::setw(2) << minute << ":";
+  stream << std::setfill('0') << std::setw(2) << second;
 
-  return hour_str + ":" + minute_str + ":" + second_str;
+  return stream.str();
 }

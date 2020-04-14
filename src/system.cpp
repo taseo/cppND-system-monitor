@@ -26,7 +26,7 @@ std::vector<Process> &System::Processes() {
     process.UpdateStats();
   }
 
-  std::sort(processes.begin(), processes.end(), CompareProcesses);
+  std::sort(processes.begin(), processes.end());
   processes_ = processes;
 
   return processes_;

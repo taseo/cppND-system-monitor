@@ -19,10 +19,6 @@ public:
   std::string OperatingSystem();
 
 private:
-  static bool CompareProcesses(Process &a, Process &b) {
-    return (a.CpuUtilization()) > (b.CpuUtilization());
-  }
-
   Processor cpu_ = {};
   std::vector<Process> processes_ = {};
   std::string operating_system_;
